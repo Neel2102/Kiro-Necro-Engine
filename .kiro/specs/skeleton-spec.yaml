@@ -1,0 +1,32 @@
+﻿version: 1.0
+name: necro-engine-skeleton
+description: Required structure for Necro Engine projects
+
+structure:
+  - path: "src/**/*.{ts,tsx}"
+    description: "TypeScript source files"
+  - path: "*.md"
+    description: "Documentation files"
+  - path: ".kiro/**/*"
+    description: "Kiro configuration and hooks"
+
+dependencies:
+  required:
+    - "@types/react"
+    - "typescript"
+    - "next"
+  recommended:
+    - "eslint"
+    - "prettier"
+
+validations:
+  - name: "typescript-config"
+    type: "file-exists"
+    path: "tsconfig.json"
+    message: "TypeScript configuration is required"
+  
+  - name: "eslint-config"
+    type: "file-exists"
+    path: ".eslintrc"
+    severity: "warning"
+    message: "ESLint configuration is recommended"

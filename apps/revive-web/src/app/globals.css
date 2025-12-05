@@ -1,0 +1,810 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* 🎃 ACCESSIBLE HALLOWEEN THEME - WCAG AA COMPLIANT 🎃 */
+  --foreground-rgb: 253, 186, 116; /* Warm orange - high contrast */
+  --background-start-rgb: 17, 24, 39; /* Dark gray-blue */
+  --background-end-rgb: 15, 10, 20; /* Very dark purple */
+  --spooky-orange: 249, 115, 22; /* Bright orange */
+  --ghost-white: 229, 231, 235; /* Light gray */
+  --witch-purple: 147, 51, 234; /* Vibrant purple */
+  --blood-red: 220, 38, 38; /* Bright red */
+  --fog-gray: 156, 163, 175; /* Medium gray */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 253, 186, 116;
+    --background-start-rgb: 17, 24, 39;
+    --background-end-rgb: 15, 10, 20;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: 
+    radial-gradient(ellipse at top, rgba(147, 51, 234, 0.2), transparent 50%),
+    radial-gradient(ellipse at bottom, rgba(249, 115, 22, 0.15), transparent 50%),
+    linear-gradient(
+      to bottom,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-end-rgb))
+    );
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 🎃 Spooky floating particles */
+body::before {
+  content: '🦇';
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  font-size: 2rem;
+  opacity: 0.3;
+  animation: float-bat 8s ease-in-out infinite, drift-left 15s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+body::after {
+  content: '👻';
+  position: fixed;
+  top: 30%;
+  right: 15%;
+  font-size: 2.5rem;
+  opacity: 0.25;
+  animation: float-ghost 6s ease-in-out infinite, drift-right 20s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 🎃 SPOOKY HALLOWEEN ANIMATIONS 🎃 */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
+}
+
+@keyframes float-bat {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+@keyframes float-ghost {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-25px) scale(1.1); }
+}
+
+@keyframes drift-left {
+  0% { left: 10%; }
+  50% { left: 5%; }
+  100% { left: 10%; }
+}
+
+@keyframes drift-right {
+  0% { right: 15%; }
+  50% { right: 10%; }
+  100% { right: 15%; }
+}
+
+@keyframes glow {
+  0%, 100% { 
+    text-shadow: 
+      0 0 10px rgba(255, 140, 0, 0.8),
+      0 0 20px rgba(255, 140, 0, 0.6),
+      0 0 30px rgba(255, 69, 0, 0.4);
+  }
+  50% { 
+    text-shadow: 
+      0 0 20px rgba(255, 140, 0, 1),
+      0 0 30px rgba(255, 140, 0, 0.8),
+      0 0 40px rgba(255, 69, 0, 0.6),
+      0 0 50px rgba(255, 69, 0, 0.4);
+  }
+}
+
+@keyframes spooky-glow {
+  0%, 100% { 
+    box-shadow: 
+      0 0 15px rgba(138, 43, 226, 0.5),
+      0 0 30px rgba(138, 43, 226, 0.3),
+      inset 0 0 15px rgba(255, 140, 0, 0.1);
+  }
+  50% { 
+    box-shadow: 
+      0 0 25px rgba(138, 43, 226, 0.8),
+      0 0 50px rgba(138, 43, 226, 0.5),
+      inset 0 0 25px rgba(255, 140, 0, 0.2);
+  }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+  75% { opacity: 0.9; }
+}
+
+@keyframes cobweb-sway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(3deg); }
+}
+
+/* 🎃 HALLOWEEN CUSTOM COMPONENTS 🎃 */
+.btn-primary {
+  @apply bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 text-black font-bold py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-110 shadow-lg;
+  box-shadow: 
+    0 0 20px rgba(255, 140, 0, 0.5),
+    0 4px 15px rgba(0, 0, 0, 0.4);
+  animation: flicker 3s ease-in-out infinite;
+}
+
+.btn-primary:hover {
+  box-shadow: 
+    0 0 30px rgba(255, 140, 0, 0.8),
+    0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+.btn-primary::before {
+  content: '🎃 ';
+}
+
+.btn-secondary {
+  @apply bg-purple-900 hover:bg-purple-800 text-spooky-orange font-bold py-2 px-6 rounded-lg transition-all duration-300 border-2 border-purple-600 hover:border-orange-500;
+  box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+}
+
+.btn-secondary::before {
+  content: '👻 ';
+}
+
+.input-field {
+  @apply w-full px-4 py-2 rounded-lg border-2 border-orange-700 bg-black/80 text-spooky-ghost placeholder-orange-600/60 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.7);
+  background-color: rgba(6, 8, 18, 0.95);
+}
+
+.input-field:focus {
+  box-shadow: 
+    inset 0 2px 10px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(255, 140, 0, 0.4);
+}
+
+/* 🪦 SPOOKY TOMBSTONE CARD STYLES 🪦 */
+.tombstone-card {
+  @apply bg-gradient-to-br from-gray-900 to-black border-2 border-purple-800 rounded-xl p-6 shadow-2xl hover:shadow-purple-900 transition-all duration-300 transform hover:-translate-y-2;
+  position: relative;
+  overflow: hidden;
+  animation: spooky-glow 4s ease-in-out infinite;
+}
+
+.tombstone-card::before {
+  content: '🕷️';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+  opacity: 0.3;
+  animation: cobweb-sway 3s ease-in-out infinite;
+}
+
+.tombstone-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff8c00, #8b0000, #8a2be2, #ff8c00);
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 🎃 ACCESSIBLE SEVERITY BADGES 🎃 */
+.severity-high { 
+  background-color: rgba(127, 29, 29, 0.6);
+  color: rgb(252, 165, 165);
+  border: 2px solid rgb(220, 38, 38);
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.5);
+}
+.severity-high::before { content: '💀 '; }
+
+.severity-medium { 
+  background-color: rgba(120, 53, 15, 0.6);
+  color: rgb(253, 186, 116);
+  border: 2px solid rgb(249, 115, 22);
+  box-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
+}
+.severity-medium::before { content: '🎃 '; }
+
+.severity-low { 
+  background-color: rgba(30, 58, 138, 0.6);
+  color: rgb(147, 197, 253);
+  border: 2px solid rgb(59, 130, 246);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+}
+.severity-low::before { content: '👻 '; }
+
+.severity-info { 
+  background-color: rgba(55, 65, 81, 0.6);
+  color: rgb(209, 213, 219);
+  border: 2px solid rgb(107, 114, 128);
+  box-shadow: 0 0 10px rgba(107, 114, 128, 0.3);
+}
+.severity-info::before { content: '🕸️ '; }
+
+/* 🎃 SPOOKY HERO / BRANDING ACCENTS 🎃 */
+.hero-title {
+  @apply tracking-tight text-orange-500;
+  animation: glow 3s ease-in-out infinite;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.hero-skull {
+  animation: float 4s ease-in-out infinite, glow 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.8));
+}
+
+/* Jack-o'-lantern effect */
+.pumpkin-glow {
+  color: #ff8c00;
+  text-shadow: 
+    0 0 10px #ff8c00,
+    0 0 20px #ff8c00,
+    0 0 30px #ff4500,
+    0 0 40px #ff4500;
+  animation: flicker 2s ease-in-out infinite;
+}
+
+/* 🕸️ HAUNTED SECTION CARDS 🕸️ */
+.section-card {
+  @apply bg-black/70 border-2 border-purple-800/60 rounded-2xl shadow-2xl hover:shadow-purple-900 transition-all duration-300;
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+.section-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 140, 0, 0.6);
+  box-shadow: 
+    0 10px 40px rgba(138, 43, 226, 0.4),
+    0 0 30px rgba(255, 140, 0, 0.3);
+}
+
+/* Cobweb decoration */
+.section-card::before {
+  content: '🕸️';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  font-size: 2rem;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* Spooky corner accent */
+.section-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at bottom right, rgba(255, 140, 0, 0.2), transparent);
+  pointer-events: none;
+}
+
+
+/* 🎃 EXTRA HALLOWEEN EFFECTS 🎃 */
+
+/* Spooky cursor - RESTORED AND FIXED */
+* {
+  cursor: default;
+}
+
+a, button, .btn-primary, .btn-secondary, input[type="checkbox"], [role="button"] {
+  cursor: pointer !important;
+}
+
+input[type="text"], input[type="url"], textarea, input {
+  cursor: text !important;
+}
+
+/* Ensure clickable elements work */
+button, a, input, select, textarea {
+  position: relative;
+  z-index: 10;
+}
+
+/* Floating Halloween elements */
+.halloween-decoration {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  font-size: 2rem;
+  opacity: 0.2;
+}
+
+.halloween-decoration:nth-child(1) {
+  top: 5%;
+  left: 5%;
+  animation: float-bat 10s ease-in-out infinite;
+}
+
+.halloween-decoration:nth-child(2) {
+  top: 15%;
+  right: 10%;
+  animation: float-ghost 8s ease-in-out infinite 1s;
+}
+
+.halloween-decoration:nth-child(3) {
+  bottom: 20%;
+  left: 15%;
+  animation: float 12s ease-in-out infinite 2s;
+}
+
+/* Spooky text effects */
+.spooky-text {
+  color: #ff8c00;
+  text-shadow: 
+    0 0 5px #ff8c00,
+    0 0 10px #ff8c00,
+    0 0 15px #ff4500,
+    0 0 20px #ff4500,
+    0 0 25px #8b0000;
+  animation: flicker 2s ease-in-out infinite;
+}
+
+.ghost-text {
+  color: #f0f0ff;
+  text-shadow: 
+    0 0 10px rgba(240, 240, 255, 0.8),
+    0 0 20px rgba(240, 240, 255, 0.6),
+    0 0 30px rgba(138, 43, 226, 0.4);
+  animation: float-ghost 4s ease-in-out infinite;
+}
+
+/* Witch's cauldron bubbling effect */
+.bubbling {
+  animation: bubble 1.5s ease-in-out infinite;
+}
+
+@keyframes bubble {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.05); }
+  50% { transform: scale(0.95); }
+  75% { transform: scale(1.02); }
+}
+
+/* Blood drip effect */
+.blood-drip {
+  position: relative;
+  overflow: visible;
+}
+
+.blood-drip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 2px;
+  height: 20px;
+  background: linear-gradient(to bottom, #8b0000, transparent);
+  animation: drip 3s ease-in-out infinite;
+}
+
+@keyframes drip {
+  0% { height: 0; opacity: 1; }
+  50% { height: 20px; opacity: 1; }
+  100% { height: 20px; opacity: 0; }
+}
+
+/* Moonlight glow */
+.moonlight {
+  box-shadow: 
+    0 0 20px rgba(255, 250, 205, 0.3),
+    0 0 40px rgba(255, 250, 205, 0.2),
+    inset 0 0 20px rgba(255, 250, 205, 0.1);
+}
+
+/* Haunted house window effect */
+.haunted-window {
+  background: linear-gradient(135deg, 
+    rgba(255, 140, 0, 0.1) 0%,
+    rgba(138, 43, 226, 0.1) 50%,
+    rgba(139, 0, 0, 0.1) 100%);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 140, 0, 0.3);
+  box-shadow: 
+    0 0 20px rgba(255, 140, 0, 0.2),
+    inset 0 0 20px rgba(138, 43, 226, 0.1);
+}
+
+/* Cobweb corner decorations */
+.cobweb-corner::before {
+  content: '🕸️';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  font-size: 3rem;
+  opacity: 0.15;
+  transform: rotate(-45deg);
+  pointer-events: none;
+}
+
+.cobweb-corner::after {
+  content: '🕷️';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 1rem;
+  opacity: 0.3;
+  animation: cobweb-sway 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Pumpkin patch background pattern */
+.pumpkin-patch {
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(255, 140, 0, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(138, 43, 226, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(139, 0, 0, 0.03) 0%, transparent 50%);
+}
+
+/* Spooky scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0514;
+  border-left: 2px solid #8a2be2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff8c00, #8b0000);
+  border-radius: 6px;
+  border: 2px solid #0a0514;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ffa500, #ff0000);
+  box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+
+/* Fog effect */
+.fog {
+  position: relative;
+  overflow: hidden;
+}
+
+.fog::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -100%;
+  width: 300%;
+  height: 100px;
+  background: linear-gradient(90deg, 
+    transparent 0%,
+    rgba(128, 128, 128, 0.1) 25%,
+    rgba(128, 128, 128, 0.2) 50%,
+    rgba(128, 128, 128, 0.1) 75%,
+    transparent 100%);
+  animation: fog-drift 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes fog-drift {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(33.33%); }
+}
+
+/* Lightning flash effect */
+@keyframes lightning {
+  0%, 10%, 20%, 100% { opacity: 0; }
+  5%, 15% { opacity: 1; }
+}
+
+.lightning-flash {
+  animation: lightning 8s ease-in-out infinite;
+}
+
+/* Creepy shadow text */
+.shadow-text {
+  text-shadow: 
+    3px 3px 0 rgba(139, 0, 0, 0.5),
+    6px 6px 0 rgba(138, 43, 226, 0.3),
+    9px 9px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Witch hat tilt */
+.witch-hat {
+  display: inline-block;
+  animation: hat-tilt 3s ease-in-out infinite;
+}
+
+@keyframes hat-tilt {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+/* Candy corn colors */
+.candy-corn {
+  background: linear-gradient(180deg, 
+    #fff 0%, 
+    #fff 33%, 
+    #ff8c00 33%, 
+    #ff8c00 66%, 
+    #ffff00 66%, 
+    #ffff00 100%);
+}
+
+/* 🎃 UNIFIED LAYOUT SYSTEM - FIXED CENTERING 🎃 */
+
+/* Container system - STRICT 1100px MAX WIDTH */
+.spooky-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.spooky-container-narrow {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.spooky-container-wide {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Section spacing - FIXED */
+.spooky-section {
+  padding: 3rem 0;
+  margin-bottom: 2rem;
+}
+
+.spooky-section-sm {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+/* Heading system - FIXED CENTERING */
+.spooky-heading-xl {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 2rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.spooky-heading-lg {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.spooky-heading-md {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.spooky-heading-sm {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+/* Subtitle system - FIXED */
+.spooky-subtitle {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+/* Card system - ACCESSIBLE & CLEAN */
+.spooky-card {
+  background: linear-gradient(135deg, rgba(30, 30, 40, 0.95), rgba(50, 30, 60, 0.92));
+  border: 2px solid rgba(147, 51, 234, 0.5);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 30px rgba(88, 28, 135, 0.3);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.spooky-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(147, 51, 234, 0.7);
+  box-shadow: 0 12px 40px rgba(88, 28, 135, 0.4);
+}
+
+.spooky-card-feature {
+  background: linear-gradient(135deg, rgba(88, 28, 135, 0.7), rgba(0, 0, 0, 0.8), rgba(88, 28, 135, 0.7));
+  border: 2px solid rgba(167, 139, 250, 0.6);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.spooky-card-feature:hover {
+  transform: scale(1.05) translateY(-4px);
+  border-color: rgba(251, 146, 60, 0.7);
+  box-shadow: 
+    0 15px 50px rgba(138, 43, 226, 0.5),
+    0 0 40px rgba(255, 140, 0, 0.3);
+}
+
+.spooky-card-step {
+  background: linear-gradient(135deg, rgba(88, 28, 135, 0.7), rgba(0, 0, 0, 0.8), rgba(88, 28, 135, 0.7));
+  border: 2px solid rgba(167, 139, 250, 0.6);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.spooky-card-step:hover {
+  transform: scale(1.02) translateY(-2px);
+  border-color: rgba(251, 146, 60, 0.7);
+}
+
+/* Grid system - FIXED SPACING */
+.spooky-grid {
+  display: grid;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.spooky-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .spooky-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.spooky-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .spooky-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .spooky-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Page wrapper for consistent layout */
+.page-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.page-subtitle {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+/* Navigation link */
+.nav-link {
+  @apply flex items-center text-orange-400 hover:text-orange-300 transition-all duration-300 font-semibold text-sm md:text-base;
+}
+
+.nav-link:hover {
+  filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.8));
+}
+
+/* Icon system */
+.spooky-icon-xl {
+  @apply text-4xl md:text-5xl lg:text-6xl;
+}
+
+.spooky-icon-lg {
+  @apply text-3xl md:text-4xl lg:text-5xl;
+}
+
+.spooky-icon-md {
+  @apply text-2xl md:text-3xl;
+}
+
+/* Badge system */
+.spooky-badge {
+  @apply inline-block px-4 py-2 text-xs md:text-sm font-bold rounded-full border-2 shadow-lg;
+}
+
+.spooky-badge-primary {
+  @apply spooky-badge text-orange-400 bg-purple-900/50 border-orange-500 shadow-orange-500/30 animate-flicker;
+}
+
+/* Step indicator */
+.spooky-step-icon {
+  @apply flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-orange-600 to-purple-800 border-4 border-orange-500 flex items-center justify-center font-black shadow-lg shadow-orange-500/50 animate-spooky-glow;
+}
+
+/* Text utilities - WCAG AA COMPLIANT */
+.text-spooky-orange {
+  color: rgb(253, 186, 116);
+}
+
+.text-spooky-purple {
+  color: rgb(196, 181, 253);
+}
+
+.text-spooky-ghost {
+  color: rgb(229, 231, 235);
+}
+
+/* Better text contrast */
+.text-readable {
+  color: rgb(243, 244, 246);
+}
+
+.text-readable-muted {
+  color: rgb(209, 213, 219);
+}

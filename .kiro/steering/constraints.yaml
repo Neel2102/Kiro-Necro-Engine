@@ -1,0 +1,31 @@
+﻿# Steering constraints for the Necro Engine
+# These constraints guide the modernization process
+
+constraints:
+  - name: "react-version"
+    type: "min-version"
+    package: "react"
+    version: "^18.0.0"
+    message: "React 18+ is required for modern features"
+
+  - name: "node-version"
+    type: "min-version"
+    package: "node"
+    version: "18.0.0"
+    message: "Node.js 18+ is required"
+
+  - name: "typescript-strict"
+    type: "config-check"
+    check: "compilerOptions.strict"
+    value: true
+    message: "TypeScript strict mode is recommended"
+
+  - name: "function-components"
+    type: "prefer"
+    description: "Prefer function components over class components"
+    reason: "Better performance and hooks support"
+
+  - name: "async-await"
+    type: "prefer"
+    description: "Prefer async/await over callbacks"
+    reason: "Better readability and error handling"

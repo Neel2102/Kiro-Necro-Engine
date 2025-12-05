@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Necro Repository Scanner</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .container {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #1a252f;
+        }
+        .results {
+            margin-top: 30px;
+            display: none;
+        }
+        .issue {
+            background: white;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .issue.low { border-left-color: #f1c40f; }
+        .issue.medium { border-left-color: #e67e22; }
+        .issue.high { border-left-color: #e74c3c; }
+        .issue.critical { border-left-color: #c0392b; }
+        .severity {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+            margin-right: 10px;
+        }
+        .severity.low { background: #f1c40f; }
+        .severity.medium { background: #e67e22; }
+        .severity.high { background: #e74c3c; }
+        .severity.critical { background: #c0392b; }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #2c3e50;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Necro Repository Scanner</h1>
+        
+        <div class="form-group">
+            <label for="repoPath">Repository Path:</label>
+            <input type="text" id="repoPath" placeholder="Enter full path to repository (e.g., C:/path/to/repo)" value="c:/Users/neels/OneDrive/Desktop/Kiro Necro-Engine/bonecore/common">
+        </div>
+        
+        <div class="form-group">
+            <button id="scanBtn">Scan Repository</button>
+            <label>
+                <input type="checkbox" id="verboseCheckbox" checked>
+                Show Detailed Results
+            </label>
+        </div>
+        
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Scanning repository...</p>
+        </div>
+        
+        <div id="results" class="results">
+            <h2>Scan Results</h2>
+            <div id="summary"></div>
+            <div id="issues"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('scanBtn').addEventListener('click', async () => {
+            const repoPath = document.getElementById('repoPath').value.trim();
+            const verbose = document.getElementById('verboseCheckbox').checked;
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            const summaryEl = document.getElementById('summary');
+            const issuesEl = document.getElementById('issues');
+            
+            if (!repoPath) {
+                alert('Please enter a repository path');
+                return;
+            }
+            
+            // Show loading, hide previous results
+            loading.style.display = 'block';
+            results.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/scan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ repoPath, verbose })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.text();
+                    throw new Error(error || 'Failed to scan repository');
+                }
+                
+                const data = await response.json();
+                
+                // Display summary
+                summaryEl.innerHTML = `
+                    <p><strong>Repository:</strong> ${data.report.repository}</p>
+                    <p><strong>Issues found:</strong> ${data.report.summary?.total || data.report.issues.length}</p>
+                    ${data.report.summary ? `
+                        <p><strong>Severity:</strong>
+                            info:${data.report.summary.bySeverity.info || 0} 
+                            low:${data.report.summary.bySeverity.low || 0} 
+                            medium:${data.report.summary.bySeverity.medium || 0} 
+                            high:${data.report.summary.bySeverity.high || 0} 
+                            critical:${data.report.summary.bySeverity.critical || 0}
+                        </p>
+                    ` : ''}
+                `;
+                
+                // Display issues if verbose
+                if (data.report.issues && data.report.issues.length > 0 && verbose) {
+                    issuesEl.innerHTML = '<h3>Detailed Issues</h3>';
+                    data.report.issues.forEach((issue, index) => {
+                        const issueEl = document.createElement('div');
+                        issueEl.className = `issue ${issue.severity || 'info'}`;
+                        
+                        let details = '';
+                        if (issue.details) {
+                            if (typeof issue.details === 'string') {
+                                details = issue.details;
+                            } else {
+                                details = JSON.stringify(issue.details, null, 2);
+                            }
+                        }
+                        
+                        issueEl.innerHTML = `
+                            <div>
+                                <span class="severity ${issue.severity || 'info'}">
+                                    ${issue.severity || 'info'}
+                                </span>
+                                <strong>${index + 1}. ${issue.title}</strong>
+                            </div>
+                            ${issue.filePath ? `<div><strong>File:</strong> ${issue.filePath}${issue.line ? `:${issue.line}` : ''}</div>` : ''}
+                            ${issue.language ? `<div><strong>Language:</strong> ${issue.language}</div>` : ''}
+                            ${issue.description ? `<div><strong>Description:</strong> ${issue.description}</div>` : ''}
+                            ${details ? `<div><strong>Details:</strong><pre>${details}</pre></div>` : ''}
+                        `;
+                        
+                        issuesEl.appendChild(issueEl);
+                    });
+                } else {
+                    issuesEl.innerHTML = '';
+                }
+                
+                // Show results
+                results.style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                summaryEl.innerHTML = `
+                    <div class="issue high">
+                        <strong>Error:</strong> ${error.message}
+                    </div>
+                `;
+                results.style.display = 'block';
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

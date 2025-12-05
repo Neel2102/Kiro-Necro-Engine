@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>Necro Scanner</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .form-group { margin-bottom: 15px; }
+    input { width: 100%; padding: 8px; margin-top: 5px; }
+    button { padding: 8px 15px; background: #007bff; color: white; border: none; cursor: pointer; }
+    .results { margin-top: 20px; }
+    .issue { border-left: 4px solid #007bff; padding: 10px; margin: 10px 0; background: #f8f9fa; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Necro Repository Scanner</h1>
+    <div class="form-group">
+      <label for="repoPath">Repository Path:</label>
+      <input type="text" id="repoPath" value="c:/Users/neels/OneDrive/Desktop/Kiro Necro-Engine/bonecore/common">
+    </div>
+    <button id="scanBtn">Scan Repository</button>
+    <div id="results" class="results"></div>
+  </div>
+  <script>
+    document.getElementById("scanBtn").addEventListener("click", async () => {
+      const repoPath = document.getElementById("repoPath").value.trim();
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "Scanning...";
+      
+      try {
+        const response = await fetch("/api/scan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ repoPath, verbose: true })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          let html = `<h3>Scan Results for ${data.report.repository}</h3>`;
+          html += `<p>Found ${data.report.issues?.length || 0} issues</p>`;
+          
+          if (data.report.issues?.length > 0) {
+            data.report.issues.forEach(issue => {
+              html += `
+                <div class="issue">
+                  <strong>${issue.title}</strong>
+                  ${issue.filePath ? `<p>File: ${issue.filePath}${issue.line ? `:${issue.line}` : ""}</p>` : ""}
+                  ${issue.details ? `<pre>${JSON.stringify(issue.details, null, 2)}</pre>` : ""}
+                </div>`;
+            });
+          }
+          
+          resultsDiv.innerHTML = html;
+        } else {
+          resultsDiv.innerHTML = `Error: ${data.error || "Unknown error"}`;
+        }
+      } catch (error) {
+        resultsDiv.innerHTML = `Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>

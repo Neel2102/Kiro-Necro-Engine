@@ -1,0 +1,74 @@
+# Modernization Rules Configuration
+# This file contains rules for the Modernization Planner
+
+# Rule ID (must be unique)
+update-dependencies:
+  # Type of rule (dependency, code, documentation, security, performance)
+  type: dependency
+  # Human-readable description
+  description: Update outdated dependencies to their latest versions
+  # Priority level (critical, high, medium, low)
+  priority: high
+  # Action to perform (displayed to user)
+  action: Run "npm update" or "yarn upgrade"
+  # Files this rule applies to
+  files:
+    - package.json
+    - package-lock.json
+    - yarn.lock
+  # Optional: Additional metadata
+  metadata:
+    category: maintenance
+    tags: [dependencies, security]
+
+# Rule for updating deprecated APIs
+fix-deprecated-apis:
+  type: code
+  description: Update deprecated API usages
+  priority: high
+  action: Review and update deprecated API usages
+  # Optional: Pattern to match in code (regex)
+  pattern: "deprecated\(\)"
+  # Optional: Replacement text
+  replacement: "newApi()"
+  # Optional: Condition function (as string to be evaluated)
+  condition: |
+    (issue) => issue.severity === 'high' || issue.severity === 'critical'
+  metadata:
+    category: refactoring
+    tags: [api, refactoring]
+
+# Rule for adding documentation
+add-documentation:
+  type: documentation
+  description: Add missing documentation
+  priority: medium
+  action: Add JSDoc comments and update README
+  files:
+    - "**/*.js"
+    - "**/*.ts"
+    - "**/*.jsx"
+    - "**/*.tsx"
+  metadata:
+    category: documentation
+    tags: [docs, comments]
+
+# Rule for security fixes
+security-fixes:
+  type: security
+  description: Apply security-related fixes
+  priority: critical
+  action: Review and apply security patches
+  metadata:
+    category: security
+    tags: [security, critical]
+
+# Rule for performance improvements
+improve-performance:
+  type: performance
+  description: Optimize code for better performance
+  priority: high
+  action: Optimize performance-critical sections
+  metadata:
+    category: performance
+    tags: [optimization, speed]

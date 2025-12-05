@@ -1,0 +1,44 @@
+﻿version: 1.0
+name: necro-engine-modernization
+description: Modernization rules for Necro Engine
+
+rules:
+  - name: convert-class-to-function
+    description: Convert React class components to function components
+    enabled: true
+    languages:
+      - javascript
+    patterns:
+      - "**/*.{js,jsx,ts,tsx}"
+    options:
+      taskType: refactor
+      confidenceMultiplier: 1.0
+
+  - name: python-async
+    description: Convert legacy Python sync code to async/await
+    enabled: true
+    languages:
+      - python
+    patterns:
+      - "**/*.py"
+    options:
+      taskType: refactor
+      confidenceMultiplier: 1.0
+
+  - name: update-readme
+    description: Regenerate README with modern format
+    enabled: true
+    patterns:
+      - "README.md"
+    options:
+      taskType: documentation
+      confidenceMultiplier: 1.0
+
+  - name: generate-roadmap
+    description: Generate or update project roadmap
+    enabled: true
+    patterns:
+      - "ROADMAP.md"
+    options:
+      taskType: documentation
+      confidenceMultiplier: 1.0

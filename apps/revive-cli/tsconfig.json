@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"],
+  "references": [
+    { "path": "../../bonecore/common" },
+    { "path": "../../bonecore/scanner" },
+    { "path": "../../bonecore/planner" },
+    { "path": "../../bonecore/transformer" },
+    { "path": "../../bonecore/reporter" },
+    { "path": "../../bonecore/integrations" }
+  ]
+}
